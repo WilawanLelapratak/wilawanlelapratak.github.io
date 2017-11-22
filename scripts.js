@@ -7,7 +7,7 @@ function make_bi_maskip(mask) {
 		} else {
 			maskstring += '0';
 		}
-		if (i % 8 == 0 && i != 32) {
+		if (i % 8 === 0 && i != 32) {
 			maskstring += '.';
 		}
 	}
@@ -49,9 +49,9 @@ function find_wildcard(mask) {
 	mask = make_bi_maskip(mask);
 	var invert = '';
 	for (var i = 0; i < mask.length; i++) {
-		if (mask[i] == '1') {
+		if (mask[i] === '1') {
 			invert += '0';
-		} else if (mask[i] == '0') {
+		} else if (mask[i] === '0') {
 			invert += '1';
 		} else {
 			invert += mask[i];
@@ -83,7 +83,7 @@ function plus_ip(network ,host) {
 	var result = ''
 	for (var i = 1; i <= 32; i++) {
 		result += after_change[i-1];
-		if (i % 8 == 0 & i != 32) {
+		if (i % 8 === 0 & i != 32) {
 			result += '.';
 		}
 	}
@@ -97,6 +97,20 @@ function find_usable_range(network_addr, host_num) {
 		return usable_start_range + '-' + usable_end_range;
 	} else {
 		return 'N/A';
+	}
+}
+
+function private_ip(network_addr) {
+	var network_li = network_addr.split('.');
+	if (network_li[0] === '10') {
+		return 'Private';
+	} else if (network_li[0] === '172') {
+		if (parseInt(network_li[1], 10) >= 16 && parseInt(network_li[1], 10) <= 31)
+			return 'Private';
+	} else if (network_li[0] === '192' && network_li[1] === '168') {
+		return 'Private';
+	} else {
+		return 'Public';
 	}
 }
 
@@ -122,4 +136,5 @@ $('form').submit(function(e){
 	console.log(wildcard);
 	console.log(broadcast);
 	console.log(usable_range);
+	console.log(private_ip(network_addr));
 });
