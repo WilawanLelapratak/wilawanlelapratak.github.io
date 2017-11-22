@@ -167,6 +167,7 @@ $('form').submit(function(e){
 	// console.log(hex_id);
 	var head_li = ['IP Address', 'Network Address', 'Usable Host IP Range', 'Broadcast Address', 'Total Number of Hosts', 'Number of Usable Hosts', 'Subnet Mask', 'Wildcard Mask', 'Binary Subnet Mask', 'IP Class', 'CIDR Notation', 'IP Type', 'Short', 'Binary ID', 'Integer ID', 'Hex ID'];
 	var res_li = [ip, network_addr, usable_range, broadcast, host_num, usable_host, subnet_mask, wildcard, bin_subnet, ipclass, cidr, ip_type, short, bin_id, int_id, hex_id];
+	$('tbody#res1').empty();
 	for (var i = 0; i < res_li.length; i++) {
 		$('tbody#res1').append("<tr><td>" + head_li[i] + ":</td><td>"+ res_li[i] +"</td></tr>");
 	}
