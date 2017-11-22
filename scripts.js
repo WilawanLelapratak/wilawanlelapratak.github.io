@@ -57,7 +57,6 @@ function find_wildcard(mask) {
 			invert += mask[i];
 		}
 	}
-	console.log(invert);
 	return bi_to_deci(invert);
 }
 
@@ -91,7 +90,7 @@ function plus_ip(network ,host) {
 }
 
 function find_usable_range(network_addr, host_num) {
-	if (host_num >2) {
+	if (host_num >=2) {
 		var usable_start_range = plus_ip(network_addr, 1);
 		var usable_end_range = plus_ip(network_addr, host_num-2);
 		return usable_start_range + '-' + usable_end_range;
@@ -137,18 +136,34 @@ $('form').submit(function(e){
 	var subnet = $('select#subnet').val();
 	var network_addr = find_network_ip(ip, subnet);
 	var host_num = find_host_num(subnet);
-	var usable_host = find_usable_host(host_num);
-	var wildcard = find_wildcard(subnet);
-	var broadcast = plus_ip(network_addr, host_num-1);
 	var usable_range = find_usable_range(network_addr, host_num);
+	var broadcast = plus_ip(network_addr, host_num-1);
+	var usable_host = find_usable_host(host_num);
+	var bin_subnet = make_bi_maskip(subnet);
+	var subnet_mask = bi_to_deci(bin_subnet);
+	var wildcard = find_wildcard(subnet);
+	var ipclass = ip_class(subnet);
+	var cidr = '/'+subnet;
+	var ip_type = private_ip(network_addr);
+	var short = ip + cidr;
+	var bin_id = bi_ip(ip).split('.').join('');
+	var int_id = parseInt(bin_id, 2);
+	var hex_id = int_id.toString(16);
 	console.log(ip);
-	console.log(subnet);
+	// console.log(subnet);
 	console.log(network_addr);
+	console.log(usable_range);
+	console.log(broadcast);
 	console.log(host_num);
 	console.log(usable_host);
+	console.log(subnet_mask);
 	console.log(wildcard);
-	console.log(broadcast);
-	console.log(usable_range);
-	console.log(private_ip(network_addr));
-	console.log(ip_class(subnet));
+	console.log(bin_subnet);
+	console.log(ipclass);
+	console.log(cidr);
+	console.log(ip_type);
+	console.log(short);
+	console.log(bin_id);
+	console.log(int_id);
+	console.log(hex_id);
 });
