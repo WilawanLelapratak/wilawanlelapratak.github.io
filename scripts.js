@@ -114,6 +114,19 @@ function private_ip(network_addr) {
 	}
 }
 
+function ip_class(subnet) {
+	if (subnet < 8) {
+		return '-';
+	} else if (subnet < 16) {
+		return 'A';
+	} else if (subnet < 24) {
+		return 'B'
+	} else {
+		return 'C';
+	}
+}
+
+
 for (var i = 1; i <= 32; i++) {
 	$('select#subnet').append("<option value="+i+">"+ bi_to_deci(make_bi_maskip(i)) +'/'+i+"</option>");
 }
@@ -137,4 +150,5 @@ $('form').submit(function(e){
 	console.log(broadcast);
 	console.log(usable_range);
 	console.log(private_ip(network_addr));
+	console.log(ip_class(subnet));
 });
