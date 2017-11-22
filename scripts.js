@@ -24,6 +24,15 @@ function bi_to_deci(string) {
 	return maskstring_li.join('.');
 }
 
+function find_network_ip(ip, mask) {
+	var ip_li = ip.split('.');
+	var mask_li = bi_to_deci(make_bi_maskip(mask)).split('.');
+	for (var i = 0; i < ip_li.length; i++) {
+		ip_li[i] = parseInt(ip_li[i]) & parseInt(mask_li[i]);
+	}
+	return ip_li.join('.');
+}
+
 for (var i = 1; i <= 32; i++) {
 	// console.log(bi_to_deci(make_bi_maskip(i)));
 	// console.log(i);
@@ -34,6 +43,8 @@ $('form').submit(function(e){
 	e.preventDefault();
 	var ip = $('input#Inputip').val();
 	var subnet = $('select#subnet').val();
+	var network_addr = find_network_ip(ip, subnet);
 	console.log(ip);
 	console.log(subnet);
+	console.log(network_addr);
 });
