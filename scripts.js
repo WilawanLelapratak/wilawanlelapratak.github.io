@@ -45,6 +45,22 @@ function find_usable_host(host) {
 	return usable;
 }
 
+function find_wildcard(mask) {
+	mask = make_bi_maskip(mask);
+	var invert = '';
+	for (var i = 0; i < mask.length; i++) {
+		if (mask[i] == '1') {
+			invert += '0';
+		} else if (mask[i] == '0') {
+			invert += '1';
+		} else {
+			invert += mask[i];
+		}
+	}
+	console.log(invert);
+	return bi_to_deci(invert);
+}
+
 for (var i = 1; i <= 32; i++) {
 	// console.log(bi_to_deci(make_bi_maskip(i)));
 	// console.log(i);
@@ -58,9 +74,11 @@ $('form').submit(function(e){
 	var network_addr = find_network_ip(ip, subnet);
 	var host_num = find_host_num(subnet);
 	var usable_host = find_usable_host(host_num);
+	var wildcard = find_wildcard(subnet);
 	console.log(ip);
 	console.log(subnet);
 	console.log(network_addr);
 	console.log(host_num);
 	console.log(usable_host);
+	console.log(wildcard);
 });
