@@ -125,6 +125,23 @@ function ip_class(subnet) {
 	}
 }
 
+function find_start_ip(network_addr, ipclass , char) {
+	var network_list = network_addr.split('.');
+	if (ipclass === 'C') {
+		return network_list[0] + "." + network_list[1] + "." + network_list[2] + "." + char;
+	} else if (ipclass === 'B') {
+		return network_list[0] + "." + network_list[1] + "." + char + "." + char;
+	} else if (ipclass === 'A') {
+		return network_list[0] + "." + char + "." + char + "." + char;
+	} else {
+		if (char === '*') {
+			return "";
+		} else {
+			return char + "." + char + "." + char + "." + char;
+		}
+	}
+}
+
 
 for (var i = 1; i <= 32; i++) {
 	$('select#subnet').append("<option value="+i+">"+ bi_to_deci(make_bi_maskip(i)) +'/'+i+"</option>");
@@ -149,22 +166,6 @@ $('form').submit(function(e) {
 	var bin_id = bi_ip(ip).split('.').join('');
 	var int_id = parseInt(bin_id, 2);
 	var hex_id = int_id.toString(16);
-	// console.log(ip);
-	// console.log(network_addr);
-	// console.log(usable_range);
-	// console.log(broadcast);
-	// console.log(host_num);
-	// console.log(usable_host);
-	// console.log(subnet_mask);
-	// console.log(wildcard);
-	// console.log(bin_subnet);
-	// console.log(ipclass);
-	// console.log(cidr);
-	// console.log(ip_type);
-	// console.log(short);
-	// console.log(bin_id);
-	// console.log(int_id);
-	// console.log(hex_id);
 	$('h2#res').empty();
 	$('h2#res').append("Result");
 	var head_li = ['IP Address', 'Network Address', 'Usable Host IP Range', 'Broadcast Address', 'Total Number of Hosts', 'Number of Usable Hosts', 'Subnet Mask', 'Wildcard Mask', 'Binary Subnet Mask', 'IP Class', 'CIDR Notation', 'IP Type', 'Short', 'Binary ID', 'Integer ID', 'Hex ID'];
@@ -174,10 +175,25 @@ $('form').submit(function(e) {
 		$('tbody#res1').append("<tr><td>" + head_li[i] + ":</td><td>"+ res_li[i] +"</td></tr>");
 	}
 
+	$('thead#res2').empty();
 	$('tbody#res2').empty();
 	$('h4#res2').empty();
 
 	if (subnet%8 !== 0) {
-		$('h4#res2').append("All Possible /" + subnet + " Networks for");
+		var star_ip = find_start_ip(network_addr, ipclass, '*');
+		var start_ip = find_start_ip(network_addr, ipclass, '0');
+		var end_broadcast_ip = find_start_ip(network_addr, ipclass, '255');
+		$('h4#res2').append("All Possible /" + subnet + " Networks" + star_ip);
+		$('thead#res2').append("<tr><td>Network Address</td><td>Usable Host Range</td><td>Broadcast Address</td></tr>");
+		while (true) {
+			var broadcast_ip = plus_ip(start_ip, host_num-1);
+			var sta_use_range = plus_ip(start_ip, 1);
+			var end_use_range = plus_ip(start_ip, host_num-2);
+			$('tbody#res2').append("<tr><td>" + start_ip + "</td><td>" + sta_use_range + "-" + end_use_range + "</td><td>" + broadcast_ip + "</td></tr>");
+			if (broadcast_ip === end_broadcast_ip) {
+				break;
+			}
+			start_ip = plus_ip(start_ip, host_num);
+		}
 	}
 });
