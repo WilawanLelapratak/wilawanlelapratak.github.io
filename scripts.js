@@ -130,7 +130,7 @@ for (var i = 1; i <= 32; i++) {
 	$('select#subnet').append("<option value="+i+">"+ bi_to_deci(make_bi_maskip(i)) +'/'+i+"</option>");
 }
 
-$('form').submit(function(e){
+$('form').submit(function(e) {
 	e.preventDefault();
 	var ip = $('input#Inputip').val();
 	var subnet = $('select#subnet').val();
@@ -165,10 +165,19 @@ $('form').submit(function(e){
 	// console.log(bin_id);
 	// console.log(int_id);
 	// console.log(hex_id);
+	$('h2#res').empty();
+	$('h2#res').append("Result");
 	var head_li = ['IP Address', 'Network Address', 'Usable Host IP Range', 'Broadcast Address', 'Total Number of Hosts', 'Number of Usable Hosts', 'Subnet Mask', 'Wildcard Mask', 'Binary Subnet Mask', 'IP Class', 'CIDR Notation', 'IP Type', 'Short', 'Binary ID', 'Integer ID', 'Hex ID'];
 	var res_li = [ip, network_addr, usable_range, broadcast, host_num, usable_host, subnet_mask, wildcard, bin_subnet, ipclass, cidr, ip_type, short, bin_id, int_id, hex_id];
 	$('tbody#res1').empty();
 	for (var i = 0; i < res_li.length; i++) {
 		$('tbody#res1').append("<tr><td>" + head_li[i] + ":</td><td>"+ res_li[i] +"</td></tr>");
+	}
+
+	$('tbody#res2').empty();
+	$('h4#res2').empty();
+
+	if (subnet%8 !== 0) {
+		$('h4#res2').append("All Possible /" + subnet + " Networks for");
 	}
 });
